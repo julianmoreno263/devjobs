@@ -46,7 +46,7 @@
     {{-- aqui la logica indica que "si no puede crear vacantes entonces es un dev y se le muestra el form de postularse
     a una vacante" --}}
     @cannot('create', App\Models\Vacante::class)
-    <livewire:postular-vacante />
+    <livewire:postular-vacante :vacante="$vacante" />
     @endcannot
 
 
