@@ -5,17 +5,23 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('vacantes.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
+                @auth
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('vacantes.index')" :active="request()->routeIs('vacantes.index')">
+                        {{ __('Mis Vacantes') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('vacantes.create')" :active="request()->routeIs('vacantes.create')">
+                        {{ __('Crear Vacante') }}
                     </x-nav-link>
                 </div>
+                @endauth
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -47,9 +53,6 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -57,13 +60,25 @@
 
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar Sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
 
                 @endauth
+
+                @guest
+                {{-- Navigation Links --}}
+                <div class="hidden space-x-8 sm:my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('login')">
+                        {{__('Iniciar Sesión')}}
+                    </x-nav-link>
+                    <x-nav-link :href="route('register')">
+                        {{__('Crear Cuenta')}}
+                    </x-nav-link>
+                </div>
+                @endguest
             </div>
 
             <!-- Hamburger -->
@@ -84,10 +99,29 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        @auth
+
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('vacantes.index')" :active="request()->routeIs('vacantes.index')">
+                {{ __('Mis Vacantes') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('vacantes.create')" :active="request()->routeIs('vacantes.create')">
+                {{ __('Crear Vacante') }}
+            </x-responsive-nav-link>
+
+            @if(auth()->user()->rol===2)
+            <div class="flex gap-2 items-center p-3">
+                <a class="w-7 h-7 bg-indigo-600 hover:bg-indigo-800 rounded-full flex flex-col justify-center items-center text-sm font-extrabold text-white"
+                    href="{{route('notificaciones')}}">
+                    {{auth()->user()->unreadNotifications->count()}}
+                </a>
+                <p class="text-base font-medium text-gray-600">
+                    @choice('Notificacion|Notificaciones',auth()->user()->unreadNotifications->count())
+                </p>
+            </div>
+
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->
@@ -98,9 +132,6 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
@@ -108,10 +139,12 @@
 
                     <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Cerrar Sesión') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
         </div>
+
+        @endauth
     </div>
 </nav>
