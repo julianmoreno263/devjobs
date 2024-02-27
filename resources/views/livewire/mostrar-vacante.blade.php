@@ -45,8 +45,12 @@
 
     {{-- aqui la logica indica que "si no puede crear vacantes entonces es un dev y se le muestra el form de postularse
     a una vacante" --}}
+
+    {{-- NOTA: como el componente postular-vacante se encuentra dentro de la carpeta livewire,para que laravel pueda
+    encontrarlo se nombra con un punto asi:
+    <livewire.postular-vacante /> porque asi ya puede ubicar la vista del componente. --}}
     @cannot('create', App\Models\Vacante::class)
-    <livewire:postular-vacante :vacante="$vacante" />
+    <livewire.postular-vacante :vacante="$vacante" />
     @endcannot
 
 

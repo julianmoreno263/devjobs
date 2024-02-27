@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Vacante;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Notifications\NuevoCandidato;
@@ -19,7 +20,7 @@ class PostularVacante extends Component
         'cv'=>'required|mimes:pdf'
     ];
 
-    public function mount(){
+    public function mount(Vacante $vacante){
 
         $this->vacante=$vacante;
     }
